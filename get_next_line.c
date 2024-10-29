@@ -1,86 +1,103 @@
-#include <unistd.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+
+	+:+     */
+/*   By: usogukpi <usogukpi@student.42.fr>          +#+  +:+
+	+#+        */
+/*                                                +#+#+#+#+#+
+	+#+           */
+/*   Created: 2024/10/28 12:51:01 by usogukpi          #+#    #+#             */
+/*   Updated: 2024/10/28 12:51:01 by usogukpi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "get_next_line.h"
 #include <fcntl.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
-#include "get_next_line.h"
 
-// char    *get_next_line(int fd)
-// {
-//     int static current_line = 0;
-
-//     if (ft_get_indent(current_line, fd) > 0)
-//     {
-
-//     }
-//     return (NULL);
-// }
-
-int    ft_get_indent(int wanted_line, int fd)
+int	ft_set_initial_data(char *data)
 {
-    char       c;
-    int     current_line;
+	int	i;
 
-    current_line = 0;
-    while (current_line < wanted_line)
-    {
-        if (read(fd, &c, 1) <= 0)
-            return  (-1);
-        if (c == '\n')
-            current_line++;
-    }
-    return (1);
+	i = 0;
+	data = malloc(BUFFER_SIZE * sizeof(char));
+	while (data[i] != '\0')
+	{
+		data[i] = 0;
+		i++;
+	}
+	return (1);
 }
 
+char	*ft_create_and_free_arr(char *old, char *buffer)
+{
+	char 	*new;
+	char	*new_buffer;
+	size_t	old_str_len;
+	size_t	buffer_len;
+	size_t	total_len;
 
+	old_str_len = ft_strlen(old);
+	buffer_len = ft_strlen(buffer);
+	if (buffer[buffer_len] == '\n')
+		total_len = old_str_len + buffer_len + 2;
+	else
+		total_len = old_str_len + buffer_len + 1;
+	new = malloc(sizeof(char) * (total_len));
+	if (!new || !ft_set_initial_data(new))
+		return (NULL);
+	if (buffer[BUFFER_SIZE] == '\n')
+		new_buffer = ft_substr(buffer, 0, buffer_len + 1);
+	else
+		new_buffer = ft_substr(buffer, 0, buffer_len);
+	new = ft_strjoin(old, new_buffer);
+	free(old);
+	free(new_buffer);
+	return (new);
+}
 
-// int main() {
-//     char buffer[123];
-//     char buffer2[123];
+// char	*get_next_line(int fd)
+// {
+// 	char		buffer[BUFFER_SIZE + 1];
+// 	char		*total_line;
+// 	static char *remaining_data = 0;
 
-//     int fd = open("deneme.txt", O_RDONLY);
-//     if (fd == -1) {
-//         perror("Dosya açılamadı");
-//         return 1;
-//     }
-
-//     // İlk satırı atla
-//     if (ft_get_indent(1, fd) == -1) {
-//         perror("Satır bulunamadı");
-//         close(fd);
-//         return 1;
-//     }
-
-//     // İlk okuma işlemi
-//     ssize_t bytesRead = read(fd, buffer, 8);
-//     if (bytesRead <= 0) {
-//         perror("Okuma hatası");
-//         close(fd);
-//         return 1;
-//     }
-//     printf("bytesread is : %d\n", bytesRead);
-//     buffer[4] = '\0'; // Sonlandırma karakteri ekle
-
-//     // İkinci satırı atla
-//     if (ft_get_indent(1, fd) == -1) { // wanted_line parametresi düzeltilmeli
-//         perror("Satır bulunamadı");
-//         close(fd);
-//         return 1;
-//     }
-
-//     // İkinci okuma işlemi
-//     bytesRead = read(fd, buffer2, 8);
-//     if (bytesRead <= 0) {
-//         perror("Okuma hatası");
-//         close(fd);
-//         return 1;
-//     }
-//     buffer2[6] = '\0'; // Sonlandırma karakteri ekle
-
-//     close(fd);
-
-//     // Okunan verileri ekrana yazdır
-//     printf("1. satırdan sonraki 8 karakter: %s\n", buffer);
-//     printf("2. satırdan sonraki 8 karakter: %s\n", buffer2);
-
-//     return 0;
+// 	if (fd < 0 || ft_set_initial_data(remaining_data))
+// 		return (NULL);
+	
 // }
+/*deleted part*/
+
+char	*ft_strdup(const char *s1)
+{
+	int		i;
+	int		len;
+	char	*new;
+
+	len = ft_strlen(s1);
+	new = malloc((len + 1) * sizeof(char));
+	if (new == NULL)
+		return (NULL);
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		new[i] = s1[i];
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
+}
+
+int main()
+{
+	char *s = ft_strdup("ahmet ");
+	char *buffer = ft_strdup("buffer\n 1 4234");
+
+	char *new = ft_create_and_free_arr(s, buffer);
+	// printf("new: %s", new);
+	printf("buf: %s", buffer);
+}
