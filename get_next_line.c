@@ -27,23 +27,27 @@ int	ft_set_data(char **data)  // func1
 	return (*data == NULL);
 }
 
-int	ft_rearrange_remains(char *remains, char *pos)
+char	*ft_rearrange_remains(char *remains, char *pos)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*new;
 
-	if (!pos)
-		return (-1);
-	i = 1;
+	i = 0;
 	j = 0;
-	while(pos[i] != '\0')
-	{
-		remains[j] = pos[i];
+	while (pos[i] != '\0')
 		i++;
+	new = malloc(sizeof(char) * (i + 1));
+	if (!new)
+		return (NULL);
+	while (j < i)
+	{
+		new[j] = pos[j];
 		j++;
 	}
-	remains[j] = '\0';
-	return (1);
+	new[j] = '\0';
+	free(remains);
+	return (new);
 }
 
 char	*ft_create_and_free_arr(char *old, char *buffer)  // func2
@@ -61,13 +65,14 @@ char	*ft_create_and_free_arr(char *old, char *buffer)  // func2
 	else
 		total_len = old_str_len + buffer_len + 1;
 	new = malloc(sizeof(char) * (total_len));
-	if (!new || ft_set_data(new))
+	if (!new)
 		return (NULL);
 	if (buffer[buffer_len] == '\n')
 		new_buffer = ft_substr(buffer, 0, buffer_len + 1);
 	else
 		new_buffer = ft_substr(buffer, 0, buffer_len);
 	new = ft_strjoin(old, new_buffer);
+
 	free(old);
 	free(new_buffer);
 	return (new);
@@ -77,25 +82,22 @@ char	*get_next_line(int fd) // func3
 {
 	char		buffer[BUFFER_SIZE + 1];
 	char		*total_line;
-	char		*position;
 	static char *remains = 0;
 	int			bytes_read;
 
-	if ((fd < 0 && remains) || ft_set_data(remains))
+	if ((fd < 0 && remains) || ft_set_data(&remains))
 		return (NULL);
-	ft_set_data(total_line);
+	ft_set_data(&total_line);
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	buffer[bytes_read] = '\0';
-	position = ft_strchr(buffer, '\n');
-	while (!position && bytes_read != 0)
+	total_line = ft_create_and_free_arr(total_line, buffer);
+	while (!(ft_strchr(buffer, '\n')) && bytes_read != 0)
 	{
 		total_line = ft_create_and_free_arr(total_line, buffer);
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		buffer[bytes_read] = '\0';
-		position = ft_strchr(buffer, '\n');
 	}
-	if (position)
-		ft_rearrange_remains(remains, position);
+	remains = ft_rearrange_remains(remains, ft_strchr(buffer, '\n'));
 	return (total_line);
 }
 /*deleted part*/
@@ -125,7 +127,9 @@ int main()
 	int fd = open("deneme.txt", O_RDWR, 0666);
 
 	char *result = get_next_line(fd);
-	printf("%s\n", result);
+	// char *result2 = get_next_line(fd);
+	
+	printf("result is: %s", result);+
 
 	close(fd);
 }
