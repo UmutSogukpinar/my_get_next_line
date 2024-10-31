@@ -21,60 +21,54 @@
 
 int	ft_set_data(char **data)  // func1
 {
-	*data = (char *) malloc(sizeof(char));
-	if (*data)
-		**data = '\0';
-	return (*data == NULL);
+	if (*data == NULL)
+	{
+		*data = (char *) malloc(sizeof(char));
+		if (*data)
+			**data = '\0';
+		else
+			return (1);
+	}
+	return (0);
+}
+
+int	ft_refill_buffer(char *buffer, char *remains)
+{
+	size_t	i;
+
+	i = 0;
+	while (remains[i] != '\0')
+	{
+		buffer[i] = remains[i];
+		remains[i] = 0;
+		i++;
+	}
+	buffer[i] = '\0';
+	return (1);
 }
 
 char	*ft_rearrange_remains(char *remains, char *pos)
 {
-	int		i;
-	int		j;
-	char	*new;
 
-	i = 0;
-	j = 0;
-	while (pos[i] != '\0')
-		i++;
-	new = malloc(sizeof(char) * (i + 1));
-	if (!new)
-		return (NULL);
-	while (j < i)
-	{
-		new[j] = pos[j];
-		j++;
-	}
-	new[j] = '\0';
-	free(remains);
-	return (new);
 }
 
-char	*ft_create_and_free_arr(char *old, char *buffer)  // func2
+char	*ft_get_line(char *old, char *buf) // func2
 {
-	char 	*new;
-	char	*new_buffer;
-	size_t	old_str_len;
+	char	*new;
+	char	*new_buf;
+	char	*new_line_pos;
 	size_t	buffer_len;
-	size_t	total_len;
 
-	old_str_len = ft_strlen(old);
-	buffer_len = ft_strlen(buffer);
-	if (buffer[buffer_len] == '\n')
-		total_len = old_str_len + buffer_len + 2;
+	new_line_pos = ft_strchr(buf, '\n');
+	if (new_line_pos)
+		buffer_len = new_line_pos - buf + 1;
 	else
-		total_len = old_str_len + buffer_len + 1;
-	new = malloc(sizeof(char) * (total_len));
-	if (!new)
+		buffer_len = ft_strlen(buf);
+	new_buf = ft_substr(buf, 0, buffer_len);
+	if (!new_buf)
 		return (NULL);
-	if (buffer[buffer_len] == '\n')
-		new_buffer = ft_substr(buffer, 0, buffer_len + 1);
-	else
-		new_buffer = ft_substr(buffer, 0, buffer_len);
-	new = ft_strjoin(old, new_buffer);
-
-	free(old);
-	free(new_buffer);
+	new = ft_strjoin(old, new_buf);
+	free(new_buf);
 	return (new);
 }
 
@@ -82,24 +76,20 @@ char	*get_next_line(int fd) // func3
 {
 	char		buffer[BUFFER_SIZE + 1];
 	char		*total_line;
-	static char *remains = 0;
+	static char *remains = NULL;
 	int			bytes_read;
 
-	if ((fd < 0 && remains) || ft_set_data(&remains))
+	if (fd < 0 || ft_set_data(&total_line) || ft_set_data(&remains))
 		return (NULL);
-	ft_set_data(&total_line);
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	buffer[bytes_read] = '\0';
-	total_line = ft_create_and_free_arr(total_line, buffer);
-	while (!(ft_strchr(buffer, '\n')) && bytes_read != 0)
+	if (remains[0] != '\0')
 	{
-		total_line = ft_create_and_free_arr(total_line, buffer);
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		buffer[bytes_read] = '\0';
+		ft_refill_buffer(buffer, remains);
+		total_line = ft_get_line(total_line, buffer);
 	}
-	remains = ft_rearrange_remains(remains, ft_strchr(buffer, '\n'));
-	return (total_line);
+	
+
 }
+
 /*deleted part*/
 
 char	*ft_strdup(const char *s1)
@@ -126,10 +116,10 @@ int main()
 {
 	int fd = open("deneme.txt", O_RDWR, 0666);
 
-	char *result = get_next_line(fd);
-	// char *result2 = get_next_line(fd);
+	char *line;
+
 	
-	printf("result is: %s", result);+
+	
 
 	close(fd);
 }
