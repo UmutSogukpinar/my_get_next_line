@@ -73,6 +73,11 @@ char	*ft_get_the_line(char *old, char *src) // func3
 	if (!new)
 		return (NULL);
 	free(old);
+	if (new[0] == '\0')
+	{
+		free(new);
+		return (NULL);
+	}
 	return (new);
 }
 
@@ -101,7 +106,7 @@ char	*get_next_line(int fd) // func4
 		total_line = ft_get_the_line(total_line, buffer);
 	}
 	if (remains[0] == '\0')
-		remains = ft_update_value(&buffer);
+		remains = ft_update_value(buffer);
 	return (total_line);
 }
 
@@ -112,13 +117,15 @@ int main()
 {
 	int fd = open("deneme.txt", O_RDWR, 0666);
 
-	char *line = ft_strdup("umut");
-	char *line2;
-	char buf[] = "enes";
+	char *line1 = get_next_line(fd);
+	char *line2 = get_next_line(fd);
+	char *line3 = get_next_line(fd);
+	char *line4 = get_next_line(fd);
 
-	ft_set_data(&line2);
-
-	printf("%d", line2[0]);
+	printf("%s", line1);
+	printf("%s", line2);
+	printf("%s", line3);
+	printf("%s", line4);
  
 	close(fd);
 }
