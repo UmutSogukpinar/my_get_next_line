@@ -39,7 +39,10 @@ char	*ft_update_value(char *old)  // func2
 	char	*new;
 
 	if (old == NULL)
+	{
+		free(old);
 		return (ft_strdup(""));
+	}
 	new_line_pos = ft_strchr(old, '\n');
 	if (new_line_pos == NULL)
 	{
