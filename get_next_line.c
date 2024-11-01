@@ -73,6 +73,11 @@ char	*ft_get_the_line(char *old, char *src) // func3
 	if (!new)
 		return (NULL);
 	free(old);
+	if (new[0] == '\0')
+	{
+		free(new);
+		return (NULL);
+	}
 	return (new);
 }
 
@@ -102,8 +107,6 @@ char	*get_next_line(int fd) // func4
 	}
 	if (remains[0] == '\0')
 		remains = ft_update_value(buffer);
-	if (total_line[0] == '\0')
-		return (NULL);
 	return (total_line);
 }
 
