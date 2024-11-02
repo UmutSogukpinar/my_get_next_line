@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int	ft_set_data(char **data)
+int	ft_set_d(char **data)
 {
 	if (*data == NULL)
 	{
@@ -28,76 +28,38 @@ int	ft_set_data(char **data)
 	}
 	return (0);
 }
-
-char	*ft_update_repo(char *old)
+char	*ft_free_and_update_repo(char **old, char *new)
 {
-	size_t	len;
-	char	*new_line_pos;
-	char	*new;
-
-	if (old == NULL)
-		return (ft_strdup(""));
-	new_line_pos = ft_strchr(old, '\n');
-	if (new_line_pos == NULL)
-	{
-		free(old);
-		return (ft_strdup(""));
-	}
-	new_line_pos++;
-	len = ft_strlen(old) - (new_line_pos - old);
-	new = ft_substr(new_line_pos, 0, len);
-	free(old);
-	if (!new)
-		return (NULL);
+	free(*old);
+	*old = new;
 	return (new);
 }
 
-char	*ft_update_wbuf(char *old)
+char	*ft_free_and_clean(char **data)
 {
-	size_t	len;
-	char	*new_line_pos;
-	char	*new;
-
-	if (old == NULL)
-		return (ft_strdup(""));
-	new_line_pos = ft_strchr(old, '\n');
-	if (new_line_pos == NULL)
-		return (ft_strdup(""));
-	new_line_pos++;
-	len = ft_strlen(old) - (new_line_pos - old);
-	new = ft_substr(new_line_pos, 0, len);
-	if (!new)
-		return (NULL);
-	return (new);
+	if (*data)
+	{
+		free(*data);
+		*data = NULL;
+	}
+	return (NULL);
 }
 
-char	*ft_get_the_line(char *old, char *src)
+char	*ft_get_the_line(char *data)
 {
-	char	*new;
-	char	*new_src;
-	char	*new_line_pos;
+	size_t	len;
 
-	new_line_pos = ft_strchr(src, '\n');
-	if (new_line_pos)
-		new_src = ft_substr(src, 0, new_line_pos - src + 1);
-	else
-		new_src = ft_substr(src, 0, ft_strlen(src));
-	if (!new_src)
+	len = 0;
+	while (data[len] != '\0')
 	{
-		free(old);
-		return (NULL);
+		if (data[len] == '\n')
+		{
+			len++;
+			break ;
+		}
+		len++;
 	}
-	new = ft_strjoin(old, new_src);
-	free(new_src);
-	free(old);
-	if (!new)
-		return (NULL);
-	if (new[0] == '\0')
-	{
-		free(new);
-		return (NULL);
-	}
-	return (new);
+	return (ft_substr(data, 0, len));
 }
 
 char	*get_next_line(int fd)
@@ -107,25 +69,20 @@ char	*get_next_line(int fd)
 	static char	*repo = NULL;
 	int			bytes_read;
 
-	total_line = NULL;
-	bytes_read = 1;
-	if (fd < 0 || ft_set_data(&total_line) || ft_set_data(&repo))
+	if (fd < 0 || ft_set_d(&repo))
 		return (NULL);
-	if (repo[0] != '\0' && repo)
-	{
-		total_line = ft_get_the_line(total_line, repo);
-		repo = ft_update_repo(repo);
-	}
-	while (!ft_strchr(total_line, '\n') && bytes_read > 0)
+	while (repo && !ft_strchr(repo, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read < 0)
-			return (NULL);
+		if (bytes_read <= 0)
+			break ;
 		buffer[bytes_read] = '\0';
-		total_line = ft_get_the_line(total_line, buffer);
+		ft_free_and_update_repo(&repo, ft_strjoin(repo, buffer));
 	}
-	if (repo[0] == '\0')
-		repo = ft_update_wbuf(buffer);
+	if (bytes_read == -1 || !repo || repo[0] == '\0')
+		return (ft_free_and_clean(&repo));
+	total_line = ft_get_the_line(repo);
+	ft_free_and_update_repo(&repo, ft_update_repo(total_line, repo));
 	return (total_line);
 }
 

@@ -80,7 +80,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 	new_str = (char *) malloc(sizeof(char) * (len + 1));
 	if (!new_str)
-		return (0);
+		return (NULL);
 	i = 0;
 	while (i < len)
 	{
@@ -91,22 +91,12 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (new_str);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_update_repo(char *total_line, char *repo)
 {
-	int		i;
-	int		len;
-	char	*new;
+	size_t	repo_len;
+	size_t	line_len;
 
-	len = ft_strlen(s1);
-	new = malloc((len + 1) * sizeof(char));
-	if (new == NULL)
-		return (NULL);
-	i = 0;
-	while (s1[i] != '\0')
-	{
-		new[i] = s1[i];
-		i++;
-	}
-	new[i] = '\0';
-	return (new);
+	repo_len = ft_strlen(repo);
+	line_len = ft_strlen(total_line);
+	return (ft_substr(repo, line_len, repo_len - line_len));
 }
