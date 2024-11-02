@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: usogukpi <usogukpi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/28 12:51:09 by usogukpi          #+#    #+#             */
-/*   Updated: 2024/10/28 12:51:09 by usogukpi         ###   ########.fr       */
+/*   Created: 2024/11/02 15:47:35 by usogukpi          #+#    #+#             */
+/*   Updated: 2024/11/02 16:27:44 by usogukpi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 3000000
 # endif
 
 # include <stddef.h>
