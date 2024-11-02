@@ -36,10 +36,7 @@ char	*ft_update_repo(char *old)
 	char	*new;
 
 	if (old == NULL)
-	{
-		free(old);
 		return (ft_strdup(""));
-	}
 	new_line_pos = ft_strchr(old, '\n');
 	if (new_line_pos == NULL)
 	{
@@ -62,14 +59,10 @@ char	*ft_update_wbuf(char *old)
 	char	*new;
 
 	if (old == NULL)
-	{
 		return (ft_strdup(""));
-	}
 	new_line_pos = ft_strchr(old, '\n');
 	if (new_line_pos == NULL)
-	{
 		return (ft_strdup(""));
-	}
 	new_line_pos++;
 	len = ft_strlen(old) - (new_line_pos - old);
 	new = ft_substr(new_line_pos, 0, len);
@@ -90,12 +83,15 @@ char	*ft_get_the_line(char *old, char *src)
 	else
 		new_src = ft_substr(src, 0, ft_strlen(src));
 	if (!new_src)
+	{
+		free(old);
 		return (NULL);
+	}
 	new = ft_strjoin(old, new_src);
 	free(new_src);
+	free(old);
 	if (!new)
 		return (NULL);
-	free(old);
 	if (new[0] == '\0')
 	{
 		free(new);
@@ -137,16 +133,15 @@ int main()
 {
 	int fd = open("deneme.txt", O_RDWR, 0666);
 
-	char *line1 = get_next_line(fd); // gay
+	char *line1 = get_next_line(fd); 
 	char *line2 = get_next_line(fd); 
-	// char *line3 = get_next_line(fd);
-	// char *line4 = get_next_line(fd);
+	char *line3 = get_next_line(fd);
+	char *line4 = get_next_line(fd);
 
 	printf("%s", line1);
 	printf("%s", line2);
-	// printf("%s", line3);
-	// printf("%s", line4);
+	printf("%s", line3);
+	printf("%s", line4);
 
- 
 	close(fd);
 }
