@@ -6,7 +6,7 @@
 /*   By: usogukpi <usogukpi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:49:21 by usogukpi          #+#    #+#             */
-/*   Updated: 2024/11/03 13:25:25 by usogukpi         ###   ########.fr       */
+/*   Updated: 2024/11/03 16:46:27 by usogukpi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 int	ft_set_d(char **data)
 {
+	if (!data)
+		return (1);
 	if (*data == NULL)
 	{
 		*data = (char *) malloc(sizeof(char));
@@ -31,7 +33,8 @@ int	ft_set_d(char **data)
 
 char	*ft_free_and_update_repo(char **old, char *new)
 {
-	free(*old);
+	if (*old)
+		free(*old);
 	*old = new;
 	return (new);
 }
@@ -50,6 +53,8 @@ char	*ft_get_the_line(char *data)
 {
 	size_t	len;
 
+	if (!data)
+		return (NULL);
 	len = 0;
 	while (data[len] != '\0')
 	{
@@ -70,7 +75,7 @@ char	*get_next_line(int fd)
 	static char	*repo[1024] = {0};
 	int			bytes_read;
 
-	if (fd < 0 || ft_set_d(&repo))
+	if (fd < 0 || ft_set_d(&repo[fd]))
 		return (NULL);
 	while (repo[fd] && !ft_strchr(repo[fd], '\n'))
 	{
