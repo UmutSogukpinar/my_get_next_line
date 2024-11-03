@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: usogukpi <usogukpi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:49:21 by usogukpi          #+#    #+#             */
-/*   Updated: 2024/11/03 12:55:50 by usogukpi         ###   ########.fr       */
+/*   Updated: 2024/11/03 13:25:25 by usogukpi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -67,22 +67,39 @@ char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE + 1];
 	char		*total_line;
-	static char	*repo = NULL;
+	static char	*repo[1024] = {0};
 	int			bytes_read;
 
 	if (fd < 0 || ft_set_d(&repo))
 		return (NULL);
-	while (repo && !ft_strchr(repo, '\n'))
+	while (repo[fd] && !ft_strchr(repo[fd], '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read <= 0)
 			break ;
 		buffer[bytes_read] = '\0';
-		ft_free_and_update_repo(&repo, ft_strjoin(repo, buffer));
+		ft_free_and_update_repo(&repo[fd], ft_strjoin(repo[fd], buffer));
 	}
-	if (bytes_read == -1 || !repo || repo[0] == '\0')
-		return (ft_free_and_clean(&repo));
-	total_line = ft_get_the_line(repo);
-	ft_free_and_update_repo(&repo, ft_update_repo(total_line, repo));
+	if (bytes_read == -1 || !repo[fd] || repo[fd][0] == '\0')
+		return (ft_free_and_clean(&repo[fd]));
+	total_line = ft_get_the_line(repo[fd]);
+	ft_free_and_update_repo(&repo[fd], ft_update_repo(total_line, repo[fd]));
 	return (total_line);
 }
+
+// int main()
+// {
+// 	int fd = open("deneme.txt", O_RDWR, 0666);
+
+// 	char *line1 = get_next_line(fd); 
+// 	char *line2 = get_next_line(fd); 
+// 	char *line3 = get_next_line(fd);
+// 	char *line4 = get_next_line(fd);
+
+// 	printf("%s", line1);
+// 	printf("%s", line2);
+// 	printf("%s", line3);
+// 	printf("%s", line4);
+
+// 	close(fd);
+// }
