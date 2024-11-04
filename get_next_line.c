@@ -13,8 +13,6 @@
 #include "get_next_line.h"
 #include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
 
 int	ft_set_d(char **data)
 {
@@ -75,7 +73,7 @@ char	*get_next_line(int fd)
 	char		*total_line;
 	int			bytes_read;
 
-	if (fd < 0 || ft_set_d(&repo))
+	if (fd < 0 || ft_set_d(&repo) || BUFFER_SIZE <= 0)
 		return (NULL);
 	while (repo && !ft_strchr(repo, '\n'))
 	{

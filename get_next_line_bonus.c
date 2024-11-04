@@ -71,8 +71,8 @@ char	*ft_get_the_line(char *data)
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE + 1];
-	char		*total_line;
 	static char	*repo[1024] = {0};
+	char		*total_line;
 	int			bytes_read;
 
 	if (fd < 0 || ft_set_d(&repo[fd]) || BUFFER_SIZE <= 0)
