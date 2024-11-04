@@ -88,6 +88,8 @@ char	*get_next_line(int fd)
 	if (bytes_read == -1 || !repo || repo[0] == '\0')
 		return (ft_free_and_clean(&repo));
 	total_line = ft_get_the_line(repo);
+	if (!total_line)
+		return (ft_free_and_clean(&repo));
 	ft_free_and_update_repo(&repo, ft_update_repo(total_line, repo));
 	return (total_line);
 }

@@ -75,7 +75,7 @@ char	*get_next_line(int fd)
 	static char	*repo[1024] = {0};
 	int			bytes_read;
 
-	if (fd < 0 || ft_set_d(&repo[fd]))
+	if (fd < 0 || ft_set_d(&repo[fd]) || BUFFER_SIZE <= 0)
 		return (NULL);
 	while (repo[fd] && !ft_strchr(repo[fd], '\n'))
 	{
@@ -88,23 +88,8 @@ char	*get_next_line(int fd)
 	if (bytes_read == -1 || !repo[fd] || repo[fd][0] == '\0')
 		return (ft_free_and_clean(&repo[fd]));
 	total_line = ft_get_the_line(repo[fd]);
+	if (!total_line)
+		return (ft_free_and_clean(&repo[fd]));
 	ft_free_and_update_repo(&repo[fd], ft_update_repo(total_line, repo[fd]));
 	return (total_line);
 }
-
-// int main()
-// {
-// 	int fd = open("deneme.txt", O_RDWR, 0666);
-
-// 	char *line1 = get_next_line(fd); 
-// 	char *line2 = get_next_line(fd); 
-// 	char *line3 = get_next_line(fd);
-// 	char *line4 = get_next_line(fd);
-
-// 	printf("%s", line1);
-// 	printf("%s", line2);
-// 	printf("%s", line3);
-// 	printf("%s", line4);
-
-// 	close(fd);
-// }
