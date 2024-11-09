@@ -6,15 +6,13 @@
 /*   By: usogukpi <usogukpi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:49:21 by usogukpi          #+#    #+#             */
-/*   Updated: 2024/11/03 16:46:27 by usogukpi         ###   ########.fr       */
+/*   Updated: 2024/11/09 12:47:02 by usogukpi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-#include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
 
 int	ft_set_d(char **data)
 {

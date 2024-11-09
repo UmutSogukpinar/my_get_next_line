@@ -6,7 +6,7 @@
 /*   By: usogukpi <usogukpi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:47:35 by usogukpi          #+#    #+#             */
-/*   Updated: 2024/11/03 12:56:28 by usogukpi         ###   ########.fr       */
+/*   Updated: 2024/11/09 12:44:11 by usogukpi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #  define BUFFER_SIZE 42
 # endif
 
-# include <stdlib.h>
+#include <stddef.h>
 
 char	*get_next_line(int fd);
 
