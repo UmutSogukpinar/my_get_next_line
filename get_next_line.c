@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line_bonus.h"
-#include <stdlib.h>
+#include "get_next_line.h"
 #include <unistd.h>
 
 int	ft_set_d(char **data)

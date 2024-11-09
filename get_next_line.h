@@ -17,7 +17,7 @@
 #  define BUFFER_SIZE 42
 # endif
 
-# include <stddef.h>
+#include <stdlib.h>
 
 char	*get_next_line(int fd);
 
