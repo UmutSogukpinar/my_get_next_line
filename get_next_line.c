@@ -6,7 +6,7 @@
 /*   By: umut <umut@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:49:21 by usogukpi          #+#    #+#             */
-/*   Updated: 2024/12/01 00:19:45 by umut             ###   ########.fr       */
+/*   Updated: 2024/12/01 01:23:28 by umut             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || ft_set_d(&repo) || BUFFER_SIZE <= 0)
 		return (NULL);
 	bytes_read = 0;
-	while (repo && !ft_strchr(repo, '\n'))
+	while (repo && !ft_is_newline_char(repo))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read <= 0)

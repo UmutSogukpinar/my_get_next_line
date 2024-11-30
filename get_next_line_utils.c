@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: usogukpi <usogukpi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: umut <umut@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:51:35 by usogukpi          #+#    #+#             */
-/*   Updated: 2024/11/09 14:58:23 by usogukpi         ###   ########.fr       */
+/*   Updated: 2024/12/01 01:23:17 by umut             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,25 +52,20 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (arr);
 }
 
-char	*ft_strchr(const char *s, int c)
+int	ft_is_newline_char(const char *s)
 {
-	int				i;
-	unsigned char	new_c;
+	int	i;
 
 	if (!s)
-		return (NULL);
+		return (0);
 	i = 0;
-	new_c = (unsigned char) c;
 	while (s[i] != '\0')
 	{
-		if (s[i] == new_c)
-			return ((char *)(s + i));
+		if (s[i] == '\n')
+			return (1);
 		i++;
 	}
-	if (s[i] == new_c)
-		return ((char *) &s[i]);
-	else
-		return (NULL);
+	return (0);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
