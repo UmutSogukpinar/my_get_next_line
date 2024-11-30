@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: usogukpi <usogukpi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: umut <umut@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:49:21 by usogukpi          #+#    #+#             */
-/*   Updated: 2024/11/26 13:15:50 by usogukpi         ###   ########.fr       */
+/*   Updated: 2024/12/01 00:30:42 by umut             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || ft_set_d(&repo[fd]) || BUFFER_SIZE <= 0)
 		return (NULL);
+	bytes_read = 0;
 	while (repo[fd] && !ft_strchr(repo[fd], '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
@@ -82,7 +83,9 @@ char	*get_next_line(int fd)
 		buffer[bytes_read] = '\0';
 		ft_free_and_update_repo(&repo[fd], ft_strjoin(repo[fd], buffer));
 	}
-	if (bytes_read == -1 || !repo[fd] || repo[fd][0] == '\0')
+	if (!repo[fd])
+		return (ft_free_and_clean(&repo[fd]));
+	if (bytes_read == -1 || repo[fd][0] == '\0')
 		return (ft_free_and_clean(&repo[fd]));
 	total_line = ft_get_the_line(repo[fd]);
 	if (!total_line)
