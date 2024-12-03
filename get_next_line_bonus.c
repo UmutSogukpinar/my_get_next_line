@@ -56,13 +56,14 @@ char	*ft_get_the_line(char *data)
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE + 1];
-	static char	*repo[1024] = {0};
+	static char	*repo[1024] = {NULL};
 	char		*total_line;
 	int			bytes_read;
 
 	if (fd < 0 || ft_set_d(&repo[fd]) || BUFFER_SIZE <= 0)
 		return (NULL);
-	while (repo[fd] && !ft_strchr(repo[fd], '\n'))
+	bytes_read = 0;
+	while (repo[fd] && !ft_is_newline_char(repo[fd]))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read <= 0)
@@ -70,7 +71,9 @@ char	*get_next_line(int fd)
 		buffer[bytes_read] = '\0';
 		ft_free_and_update_repo(&repo[fd], ft_strjoin(repo[fd], buffer));
 	}
-	if (bytes_read == -1 || !repo[fd] || repo[fd][0] == '\0')
+	if (!repo[fd])
+		return (ft_free_and_clean(&repo[fd]));
+	if (bytes_read == -1 || repo[fd][0] == '\0')
 		return (ft_free_and_clean(&repo[fd]));
 	total_line = ft_get_the_line(repo[fd]);
 	if (!total_line)
